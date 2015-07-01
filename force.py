@@ -8,8 +8,14 @@ G = 6.67384e-11
 
 def norme_default(objet1, objet2):
 	return 0.
+
 class Force:
-	def __init__(self, objet1 = objet.Objet(x=1), objet2 = objet.Objet(y=1), norme = norme_default, name = ''):
+	def __init__(self, 
+                 objet1 = objet.Objet(x=1), 
+                 objet2 = objet.Objet(y=1), 
+                 norme = norme_default, 
+                 name = ''):
+
 		self.objet1 = objet1
 		self.objet2 = objet2
 		self.norme = norme
@@ -32,9 +38,12 @@ def norme_gravite(objet1, objet2):
 	return (objet1.masse * objet2.masse * G /(objet.distance(objet1, objet2)**2))
 
 def maj_force(liste_force):
-	for i in range(0,len(liste_force)):
-		liste_force[i].maj()
+	for force in liste_force:
+		force.maj()
 
 if __name__ == "__main__":
-	f = Force(objet.Objet(1.,2.,geometry.Vecteur(1,1),1, "caillou1"), objet.Objet(-1.,2.,geometry.Vecteur(-1,1),1, "caillou2"), norme_gravite, "gravite")
+	f = Force(objet.Objet(1. ,2., geometry.Vecteur(1, 1), 1, "caillou1"), 
+              objet.Objet(-1., 2., geometry.Vecteur(-1, 1), 1, "caillou2"), 
+              norme_gravite, 
+              "gravite")
 	print(f)
