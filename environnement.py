@@ -1,6 +1,7 @@
 #! /usr/bin/python3.4
 
 import geometry, objet, force, objet
+from tkinter import *
 
 zoom = 1000000000
 pas = 3600*24
@@ -22,34 +23,65 @@ ajout_objet(0.0,150e9,geometry.Vecteur(0,0), 2e30, 'soleil')
 
 # Prétraitement des objets
 
-for i in range(0,len(liste_objet)):
-	for j in range(0, len(liste_force)):
-		for k in range(0, len(liste_objet)):
-			if i != k:
-				liste_objet[i].add_force(liste_force[j])
-				liste_objet[i].forces[len(liste_objet[i].forces)-1].objet1 = liste_objet[i]
-				liste_objet[i].forces[len(liste_objet[i].forces)-1].objet2 = liste_objet[k]
+for obj in liste_objet:
+	for force in liste_force:
+		for obj2 in liste_objet:
+			if obj != obj2:
+				obj.add_force(force)
+				obj.forces[len(obj.forces)-1].objet1 = obj
+				obj.forces[len(obj.forces)-1].objet2 = obj2
 
 
 def clavier(event):
-	for i in range(0,len(liste_objet)):
-		force.maj_force(liste_objet[i].forces)
-	for i in range(0,len(liste_objet)):
-		liste_objet[i].tic()
-	canvas.coords(objet1_i, 250+liste_objet[0].position.x/zoom,250+liste_objet[0].position.y/zoom,250+liste_objet[0].position.x/zoom+25,250+liste_objet[0].position.y/zoom+25)
-	canvas.coords(objet2_i,250+ liste_objet[1].position.x/zoom, 250+liste_objet[1].position.y/zoom,250+liste_objet[1].position.x/zoom+10,250+liste_objet[1].position.y/zoom+10)
-	canvas.coords(objet3_i,250+ liste_objet[2].position.x/zoom, 250+liste_objet[2].position.y/zoom,250+liste_objet[2].position.x/zoom+50,250+liste_objet[2].position.y/zoom+50)
+	for obj in liste_objet:
+		force.maj_force(obj.forces)
+	for obj in liste_objet:
+		obj.tic()
 
+    obj0,obj1,obj2 = liste_objet[0:2]
+	
+    canvas.coords(objet1_i, 
+                250 + obj0.position.x/zoom,
+                250 + obj0.position.y/zoom,
+                250 + obj0.position.x/zoom + 25,
+                250 + obj0.position.y/zoom + 25)
 
+	canvas.coords(objet2_i,
+                250 + obj1.position.x/zoom, 
+                250 + obj1.position.y/zoom,
+                250 + obj1.position.x/zoom + 10,
+                250 + obj1.position.y/zoom + 10)
 
-from tkinter import *
+	canvas.coords(objet3_i,
+                250 + obj2.position.x/zoom, 
+                250 + obj2.position.y/zoom, 
+                250 + obj2.position.x/zoom + 50,
+                250 + obj2.position.y/zoom + 50)
 
 
 fenetre = Tk()
 canvas = Canvas(fenetre,width = 1250, height = 650, background = 'white')
-objet1_i = canvas.create_oval(liste_objet[0].position.x,liste_objet[0].position.y,liste_objet[0].position.x+50,liste_objet[0].position.y+50, fill = 'black')
-objet2_i = canvas.create_oval(liste_objet[1].position.x,liste_objet[1].position.y,liste_objet[1].position.x+50,liste_objet[1].position.y+50, fill = 'green')
-objet3_i = canvas.create_oval(liste_objet[1].position.x,liste_objet[1].position.y,liste_objet[1].position.x+50,liste_objet[1].position.y+50, fill = 'yellow')
+
+obj0,obj1,obj2 = liste_objet[0:2]
+
+objet1_i = canvas.create_oval(obj0.position.x,
+                             obj0.position.y,
+                             obj0.position.x+50,
+                             obj0.position.y+50, 
+                             fill = 'black')
+
+objet2_i = canvas.create_oval(obj1.position.x,
+                             obj1.position.y,
+                             obj1.position.x + 50,
+                             obj1.position.y + 50, 
+                             fill = 'green')
+
+objet3_i = canvas.create_oval(obj1.position.x,
+                             obj1.position.y,
+                             obj1.position.x + 50,
+                             obj1.position.y + 50, 
+                             fill = 'yellow')
+
 canvas.focus_set()
 canvas.bind("<Key>", clavier)
 canvas.pack()
